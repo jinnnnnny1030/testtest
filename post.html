@@ -130,9 +130,11 @@
             const contentInput = document.getElementById('content');
             const imageInput = document.getElementById('imageInput');
             const postsContainer = document.getElementById('posts');
-
+    
+            const serverUrl = 'http://[서버 IP 주소]:3000';
+    
             async function loadPosts() {
-                const response = await fetch('http://localhost:3000/posts');
+                const response = await fetch(`${serverUrl}/posts`);
                 const posts = await response.json();
                 postsContainer.innerHTML = '';
                 posts.forEach((post, index) => {
@@ -141,7 +143,7 @@
                     const postImage = document.createElement('img');
                     const postContent = document.createElement('p');
                     const deleteButton = document.createElement('button');
-
+    
                     postTitle.textContent = post.title;
                     if (post.image) {
                         postImage.src = post.image;
@@ -153,80 +155,68 @@
                     deleteButton.addEventListener('click', () => {
                         deletePost(index);
                     });
-
+    
                     newPost.appendChild(postTitle);
-                    if (post.image) {
-                        newPost.appendChild(postImage); // Add image after title
-                    }
+                    newPost.appendChild(postImage); // Add image after title
                     newPost.appendChild(postContent);
                     newPost.appendChild(deleteButton);
                     postsContainer.appendChild(newPost);
                 });
             }
-
+    
             async function deletePost(index) {
-                await fetch(`http://localhost:3000/posts/${index}`, {
+                await fetch(`${serverUrl}/posts/${index}`, {
                     method: 'DELETE'
                 });
                 loadPosts();
             }
-
+    
             postForm.addEventListener('submit', async function(event) {
                 event.preventDefault();
-
+    
                 const title = titleInput.value;
                 const content = contentInput.value;
                 const imageFile = imageInput.files[0];
-
-                let imageUrl = '';
-                if (imageFile) {
-                    const reader = new FileReader();
-                    reader.onloadend = async function() {
-                        imageUrl = reader.result;
-
-                        const post = {
-                            title,
-                            content,
-                            image: imageUrl
-                        };
-
-                        await fetch('http://localhost:3000/posts', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(post)
-                        });
-
-                        loadPosts();
-                        titleInput.value = '';
-                        contentInput.value = '';
-                        imageInput.value = '';
-                    };
-                    reader.readAsDataURL(imageFile);
-                } else {
-                    const post = {
-                        title,
-                        content
-                    };
-
-                    await fetch('http://localhost:3000/posts', {
+    
+                const reader = new FileReader();
+                reader.onloadend = async function() {
+                    const post = { title, content, image: reader.result };
+                    await fetch(`${serverUrl}/posts`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify(post)
                     });
-
                     loadPosts();
+    
                     titleInput.value = '';
                     contentInput.value = '';
+                    imageInput.value = '';
+                };
+    
+                if (imageFile) {
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    const post = { title, content, image: null };
+                    await fetch(`${serverUrl}/posts`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(post)
+                    });
+                    loadPosts();
+    
+                    titleInput.value = '';
+                    contentInput.value = '';
+                    imageInput.value = '';
                 }
             });
-
+    
             loadPosts();
         });
-    </script>
+    </script>    
             <!-- Footer-->
             <footer class="border-top">
                 <div class="container px-4 px-lg-5">
