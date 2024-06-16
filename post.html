@@ -130,132 +130,119 @@
             const contentInput = document.getElementById('content');
             const imageInput = document.getElementById('imageInput');
             const postsContainer = document.getElementById('posts');
-    
-            const serverUrl = 'http://[서버 IP 주소]:3000';
-    
-            async function loadPosts() {
-                const response = await fetch(`${serverUrl}/posts`);
-                const posts = await response.json();
-                postsContainer.innerHTML = '';
-                posts.forEach((post, index) => {
-                    const newPost = document.createElement('article');
-                    const postTitle = document.createElement('h2');
-                    const postImage = document.createElement('img');
-                    const postContent = document.createElement('p');
-                    const deleteButton = document.createElement('button');
-    
-                    postTitle.textContent = post.title;
-                    if (post.image) {
-                        postImage.src = post.image;
-                        newPost.appendChild(postImage);
-                    }
-                    postContent.textContent = post.content;
-                    deleteButton.textContent = '삭제';
-                    deleteButton.classList.add('delete');
-                    deleteButton.addEventListener('click', () => {
-                        deletePost(index);
-                    });
-    
-                    newPost.appendChild(postTitle);
-                    newPost.appendChild(postImage); // Add image after title
-                    newPost.appendChild(postContent);
-                    newPost.appendChild(deleteButton);
-                    postsContainer.appendChild(newPost);
-                });
-            }
-    
-            async function deletePost(index) {
-                await fetch(`${serverUrl}/posts/${index}`, {
-                    method: 'DELETE'
-                });
-                loadPosts();
-            }
-    
-            postForm.addEventListener('submit', async function(event) {
-                event.preventDefault();
-    
-                const title = titleInput.value;
-                const content = contentInput.value;
-                const imageFile = imageInput.files[0];
-    
-                const reader = new FileReader();
-                reader.onloadend = async function() {
-                    const post = { title, content, image: reader.result };
-                    await fetch(`${serverUrl}/posts`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(post)
-                    });
-                    loadPosts();
-    
-                    titleInput.value = '';
-                    contentInput.value = '';
-                    imageInput.value = '';
-                };
-    
-                if (imageFile) {
-                    reader.readAsDataURL(imageFile);
-                } else {
-                    const post = { title, content, image: null };
-                    await fetch(`${serverUrl}/posts`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(post)
-                    });
-                    loadPosts();
-    
-                    titleInput.value = '';
-                    contentInput.value = '';
-                    imageInput.value = '';
+            function loadPosts() {
+            const posts = JSON.parse(localStorage.getItem('posts')) || [];
+            postsContainer.innerHTML = '';
+            posts.forEach((post, index) => {
+                const newPost = document.createElement('article');
+                const postTitle = document.createElement('h2');
+                const postImage = document.createElement('img');
+                const postContent = document.createElement('p');
+                const deleteButton = document.createElement('button');
+
+                postTitle.textContent = post.title;
+                if (post.image) {
+                    postImage.src = post.image;
+                    newPost.appendChild(postImage);
                 }
+                postContent.textContent = post.content;
+                deleteButton.textContent = '삭제';
+                deleteButton.classList.add('delete');
+                deleteButton.addEventListener('click', () => {
+                    deletePost(index);
+                });
+
+                newPost.appendChild(postTitle);
+                newPost.appendChild(postImage); // Add image after title
+                newPost.appendChild(postContent);
+                newPost.appendChild(deleteButton);
+                postsContainer.appendChild(newPost);
             });
-    
+        }
+
+        function deletePost(index) {
+            const posts = JSON.parse(localStorage.getItem('posts')) || [];
+            posts.splice(index, 1);
+            localStorage.setItem('posts', JSON.stringify(posts));
             loadPosts();
+        }
+
+        postForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const title = titleInput.value;
+            const content = contentInput.value;
+            const imageFile = imageInput.files[0];
+
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                const posts = JSON.parse(localStorage.getItem('posts')) || [];
+                posts.push({ title, content, image: reader.result });
+                localStorage.setItem('posts', JSON.stringify(posts));
+
+                loadPosts();
+
+                titleInput.value = '';
+                contentInput.value = '';
+                imageInput.value = '';
+            };
+
+            if (imageFile) {
+                reader.readAsDataURL(imageFile);
+            } else {
+                const posts = JSON.parse(localStorage.getItem('posts')) || [];
+                posts.push({ title, content, image: null });
+                localStorage.setItem('posts', JSON.stringify(posts));
+
+                loadPosts();
+
+                titleInput.value = '';
+                contentInput.value = '';
+                imageInput.value = '';
+            }
         });
-    </script>    
-            <!-- Footer-->
-            <footer class="border-top">
-                <div class="container px-4 px-lg-5">
-                    <div class="row gx-4 gx-lg-5 justify-content-center">
-                        <div class="col-md-10 col-lg-8 col-xl-7">
-                            <ul class="list-inline text-center">
-                                <li class="list-inline-item">
-                                    <a href="#!">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fas fa-circle fa-stack-2x"></i>
-                                            <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="#!">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fas fa-circle fa-stack-2x"></i>
-                                            <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="#!">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fas fa-circle fa-stack-2x"></i>
-                                            <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="small text-center text-muted fst-italic">Copyright &copy; 조혜진</div>
-                        </div>
-                    </div>
+
+        loadPosts();
+    });
+</script>
+    <!-- Footer-->
+    <footer class="border-top">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <ul class="list-inline text-center">
+                        <li class="list-inline-item">
+                            <a href="#!">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fas fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#!">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fas fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#!">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fas fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="small text-center text-muted fst-italic">Copyright &copy; 조혜진</div>
                 </div>
-            </footer>
-            <!-- Bootstrap core JS-->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-            <!-- Core theme JS-->
-            <script src="js/scripts.js"></script>
-        </body>
-</html>
+            </div>
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+</body>
