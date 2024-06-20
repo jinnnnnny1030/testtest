@@ -58,7 +58,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary" onclick="addPost()">작성</button>
+          <button type="button" class="btn btn-primary" id="submitPostButton">작성</button>
         </div>
       </div>
     </div>
@@ -99,7 +99,7 @@
           <p class="card-text">${content}</p>
           <p class="card-text"><small class="text-muted">${date}</small></p>
           <img class="card-img-bottom" src="images/3.webp" alt="이미지">
-          <button type="button" class="btn btn-danger my-3">삭제</button>
+          <button type="button" class="btn btn-danger my-3" onclick="deletePost(this)">삭제</button>
         </div>
       `;
 
@@ -116,12 +116,6 @@
         }
       });
 
-      var deleteBtn = postDiv.querySelector(".btn-danger");
-      deleteBtn.addEventListener("click", function() {
-        postDiv.remove();
-        savePosts(boardId);
-      });
-
       var postsDiv = document.getElementById(boardId);
       postsDiv.insertBefore(postDiv, postsDiv.firstChild);
 
@@ -136,7 +130,7 @@
     function addPostPage(boardId) {
       $('#addPostModal').modal('show');
       document.getElementById("addPostModalLabel").innerHTML = "게시글 작성 - " + boardId;
-      document.getElementById("addPostModal").dataset.boardId = boardId;
+      document.getElementById("submitPostButton").setAttribute("onclick", "addPost('" + boardId + "')");
     }
 
     function showBoard(boardId) {
@@ -146,6 +140,13 @@
       }
       document.getElementById(boardId).style.display = "block";
       getPosts(boardId);
+    }
+
+    function deletePost(button) {
+      var postDiv = button.parentNode.parentNode;
+      var boardId = postDiv.parentNode.id;
+      postDiv.remove();
+      savePosts(boardId);
     }
 
     showBoard("notice");
