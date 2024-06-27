@@ -1,155 +1,271 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>이리의 맥 이야기</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    .card-text,
-    .card-img-bottom {
-      display: none;
-    }
-    .card:hover .card-text,
-    .card:hover .card-img-bottom {
-      display: block;
-    }
-  </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>내 블로그 - 조혜진</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Open Sans', sans-serif;
+        }
+        button.delete {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        article {
+            position: relative;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-top: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        textarea,
+        input[type="file"],
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .container {
+            padding: 0 15px;
+        }
+    </style>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
 </head>
-<body style="background-color: black;">
-  <div class="hero text-center text-white py-5">
-    <h1 class="display-4">이리의 맥 이야기</h1>
-    <h2>컴온!!!!</h2>
-    <div class="btn-group my-3" role="group" aria-label="게시판">
-      <button type="button" class="btn btn-secondary" onclick="showBoard('notice')">공지사항</button>
-      <button type="button" class="btn btn-secondary" onclick="showBoard('board1')">게시판 1</button>
-      <button type="button" class="btn btn-secondary" onclick="showBoard('board2')">게시판 2</button>
-    </div>
-  </div>
-  <div class="container my-5">
-    <div id="notice">
-      <button type="button" class="btn btn-primary my-3" onclick="addPostPage('notice')">게시글 작성</button>
-    </div>
-    <div id="board1">
-      <button type="button" class="btn btn-primary my-3" onclick="addPostPage('board1')">게시글 작성</button>
-    </div>
-    <div id="board2">
-      <button type="button" class="btn btn-primary my-3" onclick="addPostPage('board2')">게시글 작성</button>
-    </div>
-  </div>
-  <div class="modal fade" id="addPostModal" tabindex="-1" role="dialog" aria-labelledby="addPostModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addPostModalLabel">게시글 작성</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="index.html">조혜진</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="post.html">Post</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="contact.html">Contact</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="postTitle">제목</label>
-            <input type="text" class="form-control" id="postTitle">
-          </div>
-          <div class="form-group">
-            <label for="postContent">내용</label>
-            <textarea class="form-control" id="postContent" rows="5"></textarea>
-          </div>
+    </nav>
+    <!-- Page Header-->
+    <header class="masthead" style="background-image: url('assets/img/post-bg.jpg')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="post-heading">
+                        <h1>POST</h1>
+                        <h2 class="subheading">아무 말이나 적어보세요</h2>
+                        <span class="meta">
+                            Posted by
+                            <a href="#!">조혜진</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary" id="submitPostButton">작성</button>
+    </header>
+    <!-- Post Content-->
+    <article class="mb-4">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <form id="postForm">
+                        <input type="text" id="title" placeholder="제목" required>
+                        <textarea id="content" placeholder="내용을 입력하세요" required></textarea>
+                        <input type="file" id="imageInput" accept="image/*">
+                        <button type="submit">글 올리기</button>
+                    </form>
+                    <div id="posts"></div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script>
-    function getPosts(boardId) {
-      var posts = localStorage.getItem(boardId);
-      if (posts) {
-        document.getElementById(boardId).innerHTML = posts;
-        var deleteBtns = document.querySelectorAll("#" + boardId + " .btn-danger");
-        for (var i = 0; i < deleteBtns.length; i++) {
-          deleteBtns[i].addEventListener("click", function() {
-            this.parentNode.parentNode.remove();
-            savePosts(boardId);
-          });
-        }
-      }
-    }
+    </article>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const postForm = document.getElementById('postForm');
+            const titleInput = document.getElementById('title');
+            const contentInput = document.getElementById('content');
+            const imageInput = document.getElementById('imageInput');
+            const postsContainer = document.getElementById('posts');
 
-    function savePosts(boardId) {
-      var postsDiv = document.getElementById(boardId);
-      localStorage.setItem(boardId, postsDiv.innerHTML);
-    }
+            async function loadPosts() {
+                const response = await fetch('http://localhost:3000/posts');
+                const posts = await response.json();
+                postsContainer.innerHTML = '';
+                posts.forEach((post, index) => {
+                    const newPost = document.createElement('article');
+                    const postTitle = document.createElement('h2');
+                    const postImage = document.createElement('img');
+                    const postContent = document.createElement('p');
+                    const deleteButton = document.createElement('button');
 
-    function addPost(boardId) {
-      var title = document.getElementById("postTitle").value;
-      var content = document.getElementById("postContent").value;
-      var date = new Date().toLocaleString();
+                    postTitle.textContent = post.title;
+                    if (post.image) {
+                        postImage.src = post.image;
+                        newPost.appendChild(postImage);
+                    }
+                    postContent.textContent = post.content;
+                    deleteButton.textContent = '삭제';
+                    deleteButton.classList.add('delete');
+                    deleteButton.addEventListener('click', () => {
+                        deletePost(index);
+                    });
 
-      var postDiv = document.createElement("div");
-      postDiv.className = "card my-3";
-      postDiv.innerHTML = `
-        <div class="card-body">
-          <h3 class="card-title">${title}</h3>
-          <p class="card-text">${content}</p>
-          <p class="card-text"><small class="text-muted">${date}</small></p>
-          <img class="card-img-bottom" src="images/3.webp" alt="이미지">
-          <button type="button" class="btn btn-danger my-3" onclick="deletePost(this)">삭제</button>
-        </div>
-      `;
+                    newPost.appendChild(postTitle);
+                    if (post.image) {
+                        newPost.appendChild(postImage); // Add image after title
+                    }
+                    newPost.appendChild(postContent);
+                    newPost.appendChild(deleteButton);
+                    postsContainer.appendChild(newPost);
+                });
+            }
 
-      var cardText = postDiv.querySelector(".card-text");
-      var cardImg = postDiv.querySelector(".card-img-bottom");
+            async function deletePost(index) {
+                await fetch(`http://localhost:3000/posts/${index}`, {
+                    method: 'DELETE'
+                });
+                loadPosts();
+            }
 
-      postDiv.addEventListener("click", function() {
-        if (cardText.style.display === "none") {
-          cardText.style.display = "block";
-          cardImg.style.display = "block";
-        } else {
-          cardText.style.display = "none";
-          cardImg.style.display = "none";
-        }
-      });
+            postForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
 
-      var postsDiv = document.getElementById(boardId);
-      postsDiv.insertBefore(postDiv, postsDiv.firstChild);
+                const title = titleInput.value;
+                const content = contentInput.value;
+                const imageFile = imageInput.files[0];
 
-      savePosts(boardId);
+                let imageUrl = '';
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.onloadend = async function() {
+                        imageUrl = reader.result;
 
-      document.getElementById("postTitle").value = "";
-      document.getElementById("postContent").value = "";
+                        const post = {
+                            title,
+                            content,
+                            image: imageUrl
+                        };
 
-      $('#addPostModal').modal('hide');
-    }
+                        await fetch('http://localhost:3000/posts', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(post)
+                        });
 
-    function addPostPage(boardId) {
-      $('#addPostModal').modal('show');
-      document.getElementById("addPostModalLabel").innerHTML = "게시글 작성 - " + boardId;
-      document.getElementById("submitPostButton").setAttribute("onclick", "addPost('" + boardId + "')");
-    }
+                        loadPosts();
+                        titleInput.value = '';
+                        contentInput.value = '';
+                        imageInput.value = '';
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    const post = {
+                        title,
+                        content
+                    };
 
-    function showBoard(boardId) {
-      var boards = document.querySelectorAll(".container > div");
-      for (var i = 0; i < boards.length; i++) {
-        boards[i].style.display = "none";
-      }
-      document.getElementById(boardId).style.display = "block";
-      getPosts(boardId);
-    }
+                    await fetch('http://localhost:3000/posts', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(post)
+                    });
 
-    function deletePost(button) {
-      var postDiv = button.parentNode.parentNode;
-      var boardId = postDiv.parentNode.id;
-      postDiv.remove();
-      savePosts(boardId);
-    }
+                    loadPosts();
+                    titleInput.value = '';
+                    contentInput.value = '';
+                }
+            });
 
-    showBoard("notice");
-  </script>
-</body>
+            loadPosts();
+        });
+    </script>
+            <!-- Footer-->
+            <footer class="border-top">
+                <div class="container px-4 px-lg-5">
+                    <div class="row gx-4 gx-lg-5 justify-content-center">
+                        <div class="col-md-10 col-lg-8 col-xl-7">
+                            <ul class="list-inline text-center">
+                                <li class="list-inline-item">
+                                    <a href="#!">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fas fa-circle fa-stack-2x"></i>
+                                            <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#!">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fas fa-circle fa-stack-2x"></i>
+                                            <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#!">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fas fa-circle fa-stack-2x"></i>
+                                            <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="small text-center text-muted fst-italic">Copyright &copy; 조혜진</div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- Bootstrap core JS-->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+            <!-- Core theme JS-->
+            <script src="js/scripts.js"></script>
+        </body>
 </html>
